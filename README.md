@@ -48,3 +48,6 @@ Executar `ng build` para construir o projeto. Os arquivos de construção serão
 ## Teste unitário
 
 Executar `ng test` para executar o teste unitário via [Karma](https://karma-runner.github.io).
+
+![image](https://github.com/paulolatta/multi-search-frontend/assets/91092845/c52ed73c-2ed4-4f7a-9f69-01ae493f5715)
+

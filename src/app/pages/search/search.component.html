@@ -1,0 +1,81 @@
+<div class="d-flex flex-column align-items-center">
+  <img
+    alt="logo"
+    class="logo"
+    src="assets/images/logo_multisearch.png"
+  />
+
+  <form
+    class="search-area"
+    [formGroup]="formSearch"
+    (ngSubmit)="onSubmit()"
+  >
+    <div class="input">
+      <app-simple-input
+        inputId="textoSearch"
+        [control]="formSearch.get('texto')"
+      ></app-simple-input>
+    </div>
+    <div class="lupa">
+      <img
+        alt="lupa"
+        class="lupa-img"
+        src="assets/images/lupa.png"
+      />
+    </div>
+  </form>
+
+  @if(this.results) {
+  <div class="search-area mt-4 d-flex flex-column">
+    @if (contador > 0) {
+      <span class="quantity-results mb-4">
+        Foram encontrados {{ contador }} resultados:
+      </span>
+    }@else {
+      <span class="quantity-results mb-4">
+        Nenhum item encontrado
+      </span>
+    }
+
+    @if(equipments) {
+      <app-results
+        class="mb-4"
+        title="Equipamentos"
+        [results]="equipments"
+      ></app-results>
+    }
+
+    @if(materials) {
+      <app-results
+        class="mb-4"
+        title="Produtos"
+        [results]="materials"
+      ></app-results>
+    }
+
+    @if(purchase) {
+      <app-results
+        class="mb-4"
+        title="Pedidos de Compra"
+        [results]="purchase"
+      ></app-results>
+    }
+
+    @if(sales) {
+      <app-results
+        class="mb-4"
+        title="Pedidos de Venda"
+        [results]="sales"
+      ></app-results>
+    }
+
+    @if(workforce) {
+      <app-results
+        class="mb-4"
+        title="Mãos de obra"
+        [results]="workforce"
+      ></app-results>
+    }
+  </div>
+  }
+</div>

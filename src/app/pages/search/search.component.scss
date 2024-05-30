@@ -1,0 +1,35 @@
+.logo {
+  height: 180px;
+  width: max-content;
+}
+
+.search-area {
+  width: 450px;
+  display: flex;
+
+  .input {
+    flex: auto;
+  }
+
+  .lupa {
+    border: solid 1px gray;
+    border-radius: 2px;
+    height: 30px;
+
+    .lupa-img {
+      width: 22px;
+      margin: 1px 6px;
+    }
+  }
+
+  .quantity-results {
+    font-size: 13px;
+    color: gray;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .search-area {
+    width: 350px;
+  }
+}

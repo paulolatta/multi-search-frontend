@@ -1,0 +1,27 @@
+.custom-font-size {
+  font-size: 13px;
+  color: gray;
+}
+
+.results-area {
+  border-radius: 3px;
+  border: solid 1px gray;
+
+  .title {
+    font-size: 18px;
+  }
+
+  .itens-area {
+    border-top: solid 1px gray;
+
+    .id {
+      color: red;
+      text-decoration: underline;
+      font-size: 15px;
+    }
+
+    .name {
+      font-size: 15px;
+    }
+  }
+}

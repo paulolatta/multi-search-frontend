@@ -1,0 +1,15 @@
+.form {
+  display: flex;
+  flex-direction: column;
+
+  .label {
+    font-size: 22px;
+    color: #cd3333;
+  }
+
+  .input {
+    border-radius: 3px;
+    border: solid 1px gray;
+    height: 30px;
+  }
+}

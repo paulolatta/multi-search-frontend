@@ -1,0 +1,38 @@
+<div class="results-area">
+  <div class="d-flex align-items-center justify-content-between mx-2">
+    <span class="title fw-bold">{{ title }}</span>
+
+    @if(this.results!.length) {
+      <span class="custom-font-size">
+        ( {{ this.results!.length }} itens encontrados)
+      </span>
+    }@else {
+      <span class="custom-font-size">
+        (nenhum item encontrado)
+      </span>
+    }
+  </div>
+
+  <div class="itens-area">
+    @if (this.results!.length > 0) {
+      @for (result of this.results; track result) {
+        <div class="d-flex justify-content-between mx-2 my-2">
+          <span class="id fw-bold">#{{ result.id }}</span>
+          <span class="name">{{ result.name }}</span>
+
+          @if (result.quantity) {
+            <span class="quantity">
+              Qtd: {{ result.quantity }} pç
+            </span>
+          }
+        </div>
+      }
+    } @else {
+      <div class="d-flex justify-content-center my-3">
+        <span class="custom-font-size">
+          (nenhum item encontrado)
+        </span>
+      </div>
+    }
+  </div>
+</div>

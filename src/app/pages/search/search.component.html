@@ -16,7 +16,10 @@
         [control]="formSearch.get('texto')"
       ></app-simple-input>
     </div>
-    <div class="lupa">
+    <div class="lupa"
+    (click)="onSubmit()"
+
+    >
       <img
         alt="lupa"
         class="lupa-img"

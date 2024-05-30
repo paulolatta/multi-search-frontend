@@ -8,6 +8,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
 import { ResultsComponent } from '../../components/results/results.component';
 import { SimpleInputComponent } from '../../components/simple-input/simple-input.component';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-search',
@@ -18,11 +19,11 @@ import { SimpleInputComponent } from '../../components/simple-input/simple-input
 })
 export class SearchComponent {
   results: DataResults | undefined;
-  equipments: DataEach[] | undefined = [];
-  materials: DataEach[] | undefined = [];
-  purchase: DataEach[] | undefined = [];
-  sales: DataEach[] | undefined = [];
-  workforce: DataEach[] | undefined = [];
+  equipments: DataEach[] = [];
+  materials: DataEach[]  = [];
+  purchase: DataEach[] = [];
+  sales: DataEach[] = [];
+  workforce: DataEach[] = [];
 
   contador: number = 0;
 
@@ -33,15 +34,15 @@ export class SearchComponent {
   constructor(private api: MultiSearchService) {}
 
   onSubmit(): void {
-    if (this.formSearch.get('texto')!.value) {
+    const searchText = this.formSearch.get('texto')!.value;
+    if (searchText) {
       this.cleanData();
-
-      this.api
-        .getListTeste(this.formSearch.get('texto')!.value as string)
-        .subscribe((res: DataResults) => {
-          this.results = res;
-          this.normalize();
-        });
+      this.api.getListTeste(searchText as string)
+        .pipe(
+          tap((res: DataResults) => this.results = res),
+          tap(() => this.normalize())
+        )
+        .subscribe();
     }
   }
 
@@ -55,70 +56,17 @@ export class SearchComponent {
   }
 
   normalize(): void {
-    if (this.results?.Equipment) {
-      this.contador = this.contador + this.results.Equipment.length;
-      this.results.Equipment.forEach((each) => {
-        const item = {
-          name: each.EquipmentName,
-          id: each.EquipmentID,
-        };
+    if (this.results) {
+      const { Equipment, Material, PurchaseOrder, SalesOrder, Workforce } = this.results;
 
-        this.equipments?.push(item);
-      });
-    }
+      this.equipments = Equipment?.map(each => ({ name: each.EquipmentName, id: each.EquipmentID })) || [];
+      this.materials = Material?.map(each => ({ name: each.MaterialName, id: each.MaterialID })) || [];
+      this.purchase = PurchaseOrder?.map(each => ({ name: each.MaterialName, id: each.MaterialID, quantity: each.Quantity })) || [];
+      this.sales = SalesOrder?.map(each => ({ name: each.MaterialName, id: each.MaterialID, quantity: each.Quantity })) || [];
+      this.workforce = Workforce?.map(each => ({ name: each.Name, id: each.WorkforceID })) || [];
 
-    if (this.results?.Material) {
-      this.contador = this.contador + this.results.Material.length;
-
-      this.results.Material.forEach((each) => {
-        const item = {
-          name: each.MaterialName,
-          id: each.MaterialID,
-        };
-
-        this.materials?.push(item);
-      });
-    }
-
-    if (this.results?.PurchaseOrder) {
-      this.contador = this.contador + this.results.PurchaseOrder.length;
-
-      this.results.PurchaseOrder.forEach((each) => {
-        const item = {
-          name: each.MaterialName,
-          id: each.MaterialID,
-          quantity: each.Quantity,
-        };
-
-        this.purchase?.push(item);
-      });
-    }
-
-    if (this.results?.SalesOrder) {
-      this.contador = this.contador + this.results.SalesOrder.length;
-
-      this.results.SalesOrder.forEach((each) => {
-        const item = {
-          name: each.MaterialName,
-          id: each.MaterialID,
-          quantity: each.Quantity,
-        };
-
-        this.sales?.push(item);
-      });
-    }
-
-    if (this.results?.Workforce) {
-      this.contador = this.contador + this.results.Workforce.length;
-
-      this.results.Workforce.forEach((each) => {
-        const item = {
-          name: each.Name,
-          id: each.WorkforceID,
-        };
-
-        this.workforce?.push(item);
-      });
+      this.contador = [this.equipments, this.materials, this.purchase, this.sales, this.workforce]
+        .reduce((acc, curr) => acc + curr.length, 0);
     }
   }
 }

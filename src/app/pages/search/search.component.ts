@@ -1,3 +1,4 @@
+import { Component, ViewChild } from '@angular/core';
 import {
   DataEach,
   DataResults,
@@ -5,9 +6,9 @@ import {
 } from '../../services/multi-search.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
-import { Component } from '@angular/core';
 import { ResultsComponent } from '../../components/results/results.component';
 import { SimpleInputComponent } from '../../components/simple-input/simple-input.component';
+import { ToastComponent } from '../../components/toast/toast.component';
 import { tap } from 'rxjs';
 
 @Component({
@@ -15,9 +16,11 @@ import { tap } from 'rxjs';
   standalone: true,
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
-  imports: [ReactiveFormsModule, SimpleInputComponent, ResultsComponent],
+  imports: [ReactiveFormsModule, SimpleInputComponent, ResultsComponent, ToastComponent],
 })
 export class SearchComponent {
+  @ViewChild('mensagem') mensagem!: ToastComponent;
+
   results: DataResults | undefined;
   equipments: DataEach[] = [];
   materials: DataEach[]  = [];
@@ -43,6 +46,8 @@ export class SearchComponent {
           tap(() => this.normalize())
         )
         .subscribe();
+    } else {
+      this.mensagem.showToast('Este campo não foi preenchido, por favor preencha o campo.');
     }
   }
 
@@ -67,6 +72,10 @@ export class SearchComponent {
 
       this.contador = [this.equipments, this.materials, this.purchase, this.sales, this.workforce]
         .reduce((acc, curr) => acc + curr.length, 0);
+    }
+
+    if (this.contador === 0) {
+      this.mensagem.showToast('Não foram encontrados resultados para essa busca.');
     }
   }
 }
